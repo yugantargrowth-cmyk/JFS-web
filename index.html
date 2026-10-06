@@ -310,7 +310,8 @@
     .lightbox-next { right: -44px; }
   }
   @media(max-width:768px) {
-    nav, .header-cta .btn { display: none; }
+    nav { display: none; }
+    .header-cta .btn { display: inline-flex; padding: 7px 14px; font-size: 0.8rem; }
     .hamburger { display: flex; }
     .mobile-nav { display: flex; }
     .hero h1 { font-size: 2.2rem; }
@@ -325,6 +326,66 @@
     .process-section { padding: 40px 24px; }
     .section { padding: 64px 0; }
   }
+
+  /* Mobile and usability repairs */
+  @media(max-width:600px) {
+    .form-row { grid-template-columns: 1fr; gap: 12px; }
+    .hero-btns { flex-direction: column; width: 100%; }
+    .hero-btns .btn { width: 100%; justify-content: center; }
+    .contact-card { padding: 24px 18px; }
+    .hero { padding: 110px 0 60px; }
+  }
+  .service-cta-btn {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 18px;
+    padding: 10px 20px; font-size: 0.88rem; font-weight: 600;
+    color: var(--orange); background: rgba(224,123,57,0.1); border: 1px solid rgba(224,123,57,0.3);
+    border-radius: 50px; cursor: pointer; transition: var(--transition);
+  }
+  .service-cta-btn:hover {
+    background: var(--orange); color: var(--white);
+  }
+  .lead-success-card {
+    background: #f0fdf4; border: 1px solid #86efac; border-radius: var(--radius);
+    padding: 20px; margin-top: 20px; text-align: center; display: none;
+  }
+  .lead-success-card.active { display: block; animation: fadeIn 0.3s ease; }
+  .lead-success-title { color: #166534; font-weight: 700; font-size: 1.1rem; margin-bottom: 6px; }
+  .lead-success-desc { color: #15803d; font-size: 0.92rem; line-height: 1.5; margin-bottom: 14px; }
+  .btn-whatsapp-lead {
+    display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #fff;
+    padding: 12px 24px; border-radius: 50px; font-weight: 600; font-size: 0.92rem;
+    transition: var(--transition);
+  }
+  .btn-whatsapp-lead:hover { background: #1eb857; color: #fff; transform: translateY(-2px); }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+
+  /* Responsive map, gallery, and lightbox enhancements */
+  @media(max-width:768px) {
+    .map-wrap, .map-wrap iframe { min-height: 280px !important; height: 280px !important; }
+    .lightbox-close { top: 12px; right: 12px; position: fixed; z-index: 2020; background: rgba(255,255,255,0.95); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .lightbox-nav { background: rgba(0,0,0,0.65); width: 42px; height: 42px; }
+  }
+  @media(max-width:480px) {
+    .gallery-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+    .gallery-item img, .gallery-item:nth-child(3n+1) img { height: 220px !important; }
+    .lightbox-prev { left: 4px; }
+    .lightbox-next { right: 4px; }
+  }
+  .lead-fallback-actions {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px;
+  }
+  .btn-fallback-call {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--dark); color: #fff;
+    padding: 10px 18px; border-radius: 50px; font-weight: 600; font-size: 0.88rem; transition: var(--transition);
+  }
+  .btn-fallback-call:hover { background: #333; color: #fff; }
+  .btn-fallback-email {
+    display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); color: var(--dark);
+    padding: 10px 18px; border-radius: 50px; font-weight: 600; font-size: 0.88rem; transition: var(--transition);
+  }
+  .btn-fallback-email:hover { background: rgba(0,0,0,0.05); }
+
 </style>
 </head>
 <body>
@@ -351,7 +412,7 @@
         <a href="#" class="nav-link" data-page="contact">Contact</a>
       </nav>
       <div class="header-cta">
-        <button class="btn btn-primary" onclick="showPage('contact')">Get Quote</button>
+        <button class="btn btn-primary" onclick="showPage('contact', 'quote')">Get Quote</button>
         <div class="hamburger" id="hamburger">
           <span></span><span></span><span></span>
         </div>
@@ -369,8 +430,9 @@
   <a href="#" class="nav-link" data-page="services">🛠 Services</a>
   <a href="#" class="nav-link" data-page="gallery">🖼 Gallery</a>
   <a href="#" class="nav-link" data-page="contact">📞 Contact</a>
-  <div style="margin-top:auto;padding-top:24px">
-    <a href="https://wa.me/919714461172" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center">💬 WhatsApp Us</a>
+  <div style="margin-top:auto;padding-top:20px;display:flex;flex-direction:column;gap:10px">
+    <button class="btn btn-primary" onclick="showPage('contact', 'quote');closeMobileNav();" style="width:100%;justify-content:center">💬 Get a Quote</button>
+    <a href="https://wa.me/919714461172?text=Hi%20Jangid%20Furniture%20Studio%2C%20I%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width:100%;justify-content:center">💬 WhatsApp Us</a>
   </div>
 </div>
 
@@ -386,7 +448,7 @@
         <p>Premium modular furniture & interior solutions in Ahmedabad. From modular kitchens to glass partitions — we build spaces that inspire.</p>
         <div class="hero-btns">
           <button class="btn btn-primary" onclick="showPage('gallery')">Explore Our Work →</button>
-          <button class="btn btn-outline" onclick="showPage('contact')">Get Free Site Visit</button>
+          <button class="btn btn-outline" onclick="showPage('contact', 'visit')">Get Free Site Visit</button>
         </div>
       </div>
     </div>
@@ -545,11 +607,11 @@
       <h2>Ready to Transform<br>Your Space?</h2>
       <p>Let's bring your vision to life. Get a free site visit and consultation today.</p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
-        <a href="https://wa.me/919714461172" target="_blank" class="btn whatsapp-btn">
+        <a href="https://wa.me/919714461172?text=Hi%20Jangid%20Furniture%20Studio%2C%20I%20want%20to%20chat%20about%20furniture%20services." target="_blank" rel="noopener noreferrer" class="btn whatsapp-btn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.097.544 4.068 1.496 5.78L0 24l6.363-1.467A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.787 0-3.466-.467-4.927-1.285l-.354-.209-3.678.848.877-3.578-.229-.368A9.982 9.982 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
           Chat on WhatsApp
         </a>
-        <button class="btn btn-outline" onclick="showPage('contact')" style="border-color:rgba(255,255,255,0.4)">Book Site Visit</button>
+        <button class="btn btn-outline" onclick="showPage('contact', 'visit')" style="border-color:rgba(255,255,255,0.4)">Book Free Site Visit</button>
       </div>
     </div>
   </div>
@@ -710,6 +772,7 @@
                 <li>Custom countertop: granite, quartz, or laminate</li>
                 <li>Overhead units, base units & tall units</li>
               </ul>
+              <button type="button" class="service-cta-btn" onclick="showPage('contact', 'quote', 'Modular Kitchen')">Request Modular Kitchen Quote →</button>
             </div>
           </div>
         </div>
@@ -731,6 +794,7 @@
                 <li>Premium laminate, veneer & PVC finishes</li>
                 <li>Floor-to-ceiling designs for maximum storage</li>
               </ul>
+              <button type="button" class="service-cta-btn" onclick="showPage('contact', 'quote', 'Wardrobes & Storage')">Request Wardrobes & Storage Quote →</button>
             </div>
           </div>
         </div>
@@ -752,6 +816,7 @@
                 <li>Office cabins, conference room enclosures</li>
                 <li>Toughened safety glass with varied frosting options</li>
               </ul>
+              <button type="button" class="service-cta-btn" onclick="showPage('contact', 'quote', 'Aluminium & Glass Partitions')">Request Aluminium & Glass Partitions Quote →</button>
             </div>
           </div>
         </div>
@@ -773,6 +838,7 @@
                 <li>Retail display shelving & showroom fixtures</li>
                 <li>Conference tables and lounge furniture</li>
               </ul>
+              <button type="button" class="service-cta-btn" onclick="showPage('contact', 'quote', 'Office & Showroom Furniture')">Request Office & Showroom Furniture Quote →</button>
             </div>
           </div>
         </div>
@@ -794,6 +860,7 @@
                 <li>PVC wall panels with textured & glossy options</li>
                 <li>Easy to clean, long-lasting & eco-friendly</li>
               </ul>
+              <button type="button" class="service-cta-btn" onclick="showPage('contact', 'quote', 'PVC Cabinets & Panels')">Request PVC Cabinets & Panels Quote →</button>
             </div>
           </div>
         </div>
@@ -975,6 +1042,16 @@
                 <textarea id="v-msg" placeholder="Brief description of your project..."></textarea>
               </div>
               <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitForm('visit')">Book Free Site Visit →</button>
+
+              <div id="v-success" class="lead-success-card">
+                <div class="lead-success-title" id="v-success-title">✓ Request Received!</div>
+                <div class="lead-success-desc" id="v-success-msg">Your site visit request is ready.</div>
+                <div class="lead-fallback-actions">
+                  <a id="v-wa-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-lead">💬 Send on WhatsApp</a>
+                  <a href="tel:+919714461172" class="btn-fallback-call">📞 Call Now</a>
+                  <a id="v-mail-link" href="mailto:jangidfurniturestudio@gmail.com" class="btn-fallback-email">📧 Email</a>
+                </div>
+              </div>
             </div>
 
             <!-- QUOTE FORM -->
@@ -1023,6 +1100,16 @@
                 <textarea id="q-details" placeholder="Describe your project — size, requirements, timeline..."></textarea>
               </div>
               <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitForm('quote')">Send Quote Request →</button>
+
+              <div id="q-success" class="lead-success-card">
+                <div class="lead-success-title" id="q-success-title">✓ Request Received!</div>
+                <div class="lead-success-desc" id="q-success-msg">Your quotation request is ready.</div>
+                <div class="lead-fallback-actions">
+                  <a id="q-wa-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-lead">💬 Send on WhatsApp</a>
+                  <a href="tel:+919714461172" class="btn-fallback-call">📞 Call Now</a>
+                  <a id="q-mail-link" href="mailto:jangidfurniturestudio@gmail.com" class="btn-fallback-email">📧 Email</a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1057,9 +1144,9 @@
         </div>
         <p class="footer-tagline">Premium custom furniture and interior solutions crafted with precision and care in Ahmedabad, Gujarat.</p>
         <div class="footer-social">
-          <a href="#" class="social-btn" title="Instagram">📷</a>
-          <a href="#" class="social-btn" title="Facebook">📘</a>
-          <a href="https://wa.me/919714461172" target="_blank" class="social-btn" title="WhatsApp">💬</a>
+          <a href="https://wa.me/919714461172?text=Hi%20Jangid%20Furniture%20Studio%2C%20I%20would%20like%20to%20inquire%20about%20your%20services." target="_blank" rel="noopener noreferrer" class="social-btn" title="Chat on WhatsApp">💬</a>
+          <a href="tel:+919714461172" class="social-btn" title="Call Us Directly">📞</a>
+          <a href="mailto:jangidfurniturestudio@gmail.com" class="social-btn" title="Send Email">📧</a>
         </div>
       </div>
       <div class="footer-col">
@@ -1091,14 +1178,14 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2024 Jangid Furniture Studio. All Rights Reserved.</p>
+      <p>© 2026 Jangid Furniture Studio. All Rights Reserved.</p>
       <p>Custom Wood, PVC, Aluminium & Glass Works</p>
     </div>
   </div>
 </footer>
 
 <!-- FLOATING WHATSAPP -->
-<a href="https://wa.me/919714461172" target="_blank" class="wa-float" title="Chat on WhatsApp">
+<a href="https://wa.me/919714461172?text=Hi%20Jangid%20Furniture%20Studio%2C%20I%20would%20like%20to%20inquire%20about%20your%20services." target="_blank" rel="noopener noreferrer" class="wa-float" title="Chat on WhatsApp">
   <div class="wa-pulse"></div>
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.097.544 4.068 1.496 5.78L0 24l6.363-1.467A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.787 0-3.466-.467-4.927-1.285l-.354-.209-3.678.848.877-3.578-.229-.368A9.982 9.982 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
 </a>
@@ -1196,72 +1283,290 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 renderGallery('all');
 
-// ===================== PAGE ROUTING =====================
-function showPage(name) {
+
+// ===================== JFS-OS API & LEAD CAPTURE CONFIG =====================
+const JFS_CONFIG = {
+  // Production JFS-OS backend endpoint for direct CRM lead ingestion
+  apiUrl: window.location.hostname.includes('jfs-os') || window.location.hostname === 'localhost'
+    ? '/api/leads'
+    : 'https://jfs-os.vercel.app/api/leads',
+  whatsappNumber: '919714461172',
+  businessName: 'Jangid Furniture Studio',
+  ownerEmail: 'jangidfurniturestudio@gmail.com'
+};
+
+// ===================== PAGE ROUTING & TAB NAVIGATION =====================
+function showPage(name, tab, prefillService) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
+  const targetPage = document.getElementById('page-' + name);
+  if (targetPage) targetPage.classList.add('active');
+  
   document.querySelectorAll('.nav-link').forEach(a => {
     a.classList.toggle('active', a.dataset.page === name);
   });
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
   closeMobileNav();
+
+  if (name === 'contact') {
+    if (tab) switchTab(tab);
+    if (prefillService) {
+      const srvEl = document.getElementById('q-service');
+      if (srvEl) srvEl.value = prefillService;
+    }
+  }
+
   if (name === 'gallery') renderGallery(currentFilter);
   setTimeout(initFadeUps, 100);
   if (name === 'about' || name === 'home') setTimeout(animateCounters, 400);
 }
 
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tabName);
+  });
+  document.querySelectorAll('.tab-content').forEach(t => {
+    t.classList.toggle('active', t.id === 'tab-' + tabName);
+  });
+  // Hide success messages when switching tabs
+  const vs = document.getElementById('v-success');
+  const qs = document.getElementById('q-success');
+  if (vs) vs.classList.remove('active');
+  if (qs) qs.classList.remove('active');
+}
+
 document.querySelectorAll('.nav-link').forEach(a => {
   a.addEventListener('click', (e) => {
     e.preventDefault();
-    showPage(a.dataset.page);
+    if (a.dataset.page) {
+      showPage(a.dataset.page);
+    }
   });
 });
 
 // ===================== MOBILE NAV =====================
 function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('navOverlay').classList.remove('open');
+  const nav = document.getElementById('mobileNav');
+  const overlay = document.getElementById('navOverlay');
+  if (nav) nav.classList.remove('open');
+  if (overlay) overlay.classList.remove('open');
 }
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('mobileNav').classList.add('open');
-  document.getElementById('navOverlay').classList.add('open');
-});
-document.getElementById('mobileClose').addEventListener('click', closeMobileNav);
-document.getElementById('navOverlay').addEventListener('click', closeMobileNav);
+const hamburger = document.getElementById('hamburger');
+if (hamburger) {
+  hamburger.addEventListener('click', () => {
+    document.getElementById('mobileNav').classList.add('open');
+    document.getElementById('navOverlay').classList.add('open');
+  });
+}
+const mobileClose = document.getElementById('mobileClose');
+if (mobileClose) mobileClose.addEventListener('click', closeMobileNav);
+const navOverlay = document.getElementById('navOverlay');
+if (navOverlay) navOverlay.addEventListener('click', closeMobileNav);
 
 // ===================== STICKY HEADER =====================
 window.addEventListener('scroll', () => {
-  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 60);
+  const header = document.getElementById('header');
+  if (header) header.classList.toggle('scrolled', window.scrollY > 60);
 });
 
 // ===================== FORM TABS =====================
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    switchTab(btn.dataset.tab);
   });
 });
 
-// ===================== FORM SUBMISSION =====================
-function submitForm(type) {
-  const nameEl = document.getElementById(type === 'visit' ? 'v-name' : 'q-name');
-  const phoneEl = document.getElementById(type === 'visit' ? 'v-phone' : 'q-phone');
-  const reqEl = type === 'quote' ? document.getElementById('q-service') : null;
-  const detailsEl = type === 'quote' ? document.getElementById('q-details') : null;
+// ===================== LEAD CAPTURE & SUBMISSION =====================
+async function submitForm(type) {
+  const isVisit = type === 'visit';
+  const nameEl = document.getElementById(isVisit ? 'v-name' : 'q-name');
+  const phoneEl = document.getElementById(isVisit ? 'v-phone' : 'q-phone');
+  const cityEl = isVisit ? document.getElementById('v-city') : null;
+  const dateEl = isVisit ? document.getElementById('v-date') : null;
+  const msgEl = isVisit ? document.getElementById('v-msg') : null;
 
-  if (!nameEl.value.trim()) { nameEl.focus(); nameEl.style.borderColor = '#e74c3c'; setTimeout(()=>nameEl.style.borderColor='',2000); return; }
-  const phone = phoneEl.value.replace(/\s/g,'');
-  if (!phone || !/^[+\d]{10,13}$/.test(phone)) { phoneEl.focus(); phoneEl.style.borderColor = '#e74c3c'; setTimeout(()=>phoneEl.style.borderColor='',2000); return; }
-  if (reqEl && !reqEl.value) { reqEl.focus(); reqEl.style.borderColor = '#e74c3c'; setTimeout(()=>reqEl.style.borderColor='',2000); return; }
-  if (detailsEl && !detailsEl.value.trim()) { detailsEl.focus(); detailsEl.style.borderColor = '#e74c3c'; setTimeout(()=>detailsEl.style.borderColor='',2000); return; }
+  const emailEl = !isVisit ? document.getElementById('q-email') : null;
+  const srvEl = !isVisit ? document.getElementById('q-service') : null;
+  const budgetEl = !isVisit ? document.getElementById('q-budget') : null;
+  const detailsEl = !isVisit ? document.getElementById('q-details') : null;
 
-  showToast("✓ Thank you! We'll contact you within 24 hours.");
+  const successCard = document.getElementById(isVisit ? 'v-success' : 'q-success');
+  const successTitle = document.getElementById(isVisit ? 'v-success-title' : 'q-success-title');
+  const successMsg = document.getElementById(isVisit ? 'v-success-msg' : 'q-success-msg');
+  const waLink = document.getElementById(isVisit ? 'v-wa-link' : 'q-wa-link');
+  const mailLink = document.getElementById(isVisit ? 'v-mail-link' : 'q-mail-link');
+
+  // Robust validation
+  const name = nameEl.value.trim();
+  if (name.length < 2) {
+    highlightError(nameEl);
+    showToast('Please enter your full name (minimum 2 characters).');
+    return;
+  }
+
+  const rawPhone = phoneEl.value.replace(/[^0-9]/g, '');
+  // Indian phone validation: 10 digits, or 12 digits starting with 91
+  let cleanPhone = rawPhone;
+  if (rawPhone.length === 12 && rawPhone.startsWith('91')) {
+    cleanPhone = rawPhone.slice(2);
+  }
+  if (!cleanPhone || cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+    highlightError(phoneEl);
+    showToast('Please enter a valid 10-digit Indian mobile number (e.g. 98250 12345).');
+    return;
+  }
+
+  let service = '';
+  let cityArea = '';
+  let notes = '';
+
+  if (isVisit) {
+    cityArea = cityEl ? cityEl.value.trim() : '';
+    if (cityArea.length < 3) {
+      highlightError(cityEl);
+      showToast('Please specify your area in Ahmedabad (e.g. Satellite, Bopal, Bodakdev).');
+      return;
+    }
+    service = 'Free Site Visit';
+    notes = (msgEl ? msgEl.value.trim() : '') + (dateEl && dateEl.value ? (' | Preferred Date: ' + dateEl.value) : '');
+  } else {
+    service = srvEl ? srvEl.value : '';
+    if (!service) {
+      highlightError(srvEl);
+      showToast('Please select the service you are interested in.');
+      return;
+    }
+    notes = detailsEl ? detailsEl.value.trim() : '';
+    if (notes.length < 5) {
+      highlightError(detailsEl);
+      showToast('Please provide a brief description of your requirements.');
+      return;
+    }
+    cityArea = 'Ahmedabad';
+  }
+
+  // Submit button state management
+  const submitBtn = isVisit
+    ? document.querySelector('#tab-visit .btn-primary')
+    : document.querySelector('#tab-quote .btn-primary');
+  const originalBtnText = submitBtn ? submitBtn.innerText : '';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Submitting...';
+  }
+
+  // Construct structured lead payload compatible with JFS-OS
+  const leadPayload = {
+    name: name,
+    phone: cleanPhone,
+    email: emailEl ? emailEl.value.trim() : '',
+    city: cityArea || 'Ahmedabad',
+    service: service,
+    budget: budgetEl ? budgetEl.value : '',
+    date: dateEl ? dateEl.value : '',
+    notes: notes,
+    source: isVisit ? 'Website - Free Site Visit' : 'Website - Quote Request',
+    stage: isVisit ? 'Site Visit' : 'Lead'
+  };
+
+  // 1. Send securely to JFS-OS backend
+  let apiSuccess = false;
+  let isDuplicate = false;
+  try {
+    const res = await fetch(JFS_CONFIG.apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(leadPayload)
+    });
+    const result = await res.json().catch(() => ({}));
+    if (res.ok && result.success) {
+      apiSuccess = true;
+      if (result.duplicate) {
+        isDuplicate = true;
+      }
+    } else {
+      console.warn('JFS-OS Lead Ingestion response not OK:', result);
+      // Even if network or response was not OK, fallback gracefully
+      apiSuccess = false;
+    }
+  } catch (err) {
+    console.warn('JFS-OS Lead Ingestion fetch failed (network/CORS):', err);
+    apiSuccess = false;
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerText = originalBtnText;
+    }
+  }
+
+  // 2. Compose WhatsApp message
+  let waText = '';
+  if (isVisit) {
+    waText = 'Namaste Jangid Furniture Studio, I would like to book a free site visit.\n\n' +
+      'Name: ' + name + '\n' +
+      'Phone: +91 ' + cleanPhone + '\n' +
+      'Area: ' + cityArea +
+      (dateEl && dateEl.value ? ('\nPreferred Date: ' + dateEl.value) : '') +
+      (notes ? ('\nRequirements: ' + notes) : '');
+  } else {
+    waText = 'Namaste Jangid Furniture Studio, I would like to request a quotation.\n\n' +
+      'Name: ' + name + '\n' +
+      'Phone: +91 ' + cleanPhone + '\n' +
+      'Service: ' + service +
+      (budgetEl && budgetEl.value ? ('\nBudget: ' + budgetEl.value) : '') +
+      '\nProject Details: ' + notes;
+  }
+  const waUrl = 'https://wa.me/' + JFS_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(waText);
+
+  // 3. Compose Email Fallback
+  const mailSubject = encodeURIComponent(isVisit ? 'Site Visit Booking - ' + name : 'Quote Request - ' + name + ' (' + service + ')');
+  const mailBody = encodeURIComponent(waText);
+  const mailtoUrl = 'mailto:' + (JFS_CONFIG.ownerEmail || 'jangidfurniturestudio@gmail.com') + '?subject=' + mailSubject + '&body=' + mailBody;
+
+  // 4. Update UI with verified status
+  if (successCard && successMsg && waLink) {
+    if (apiSuccess) {
+      if (successTitle) successTitle.textContent = isDuplicate ? '✓ Inquiry Already Active!' : '✓ Inquiry Sent to Workshop!';
+      successMsg.textContent = isDuplicate
+        ? 'Thank you, ' + name + '! We already received your inquiry a few minutes ago. Our workshop team is reviewing it. Tap below to chat instantly on WhatsApp.'
+        : 'Thank you, ' + name + '! Your inquiry has been sent directly to our workshop dashboard. For instant assistance, tap below to chat on WhatsApp.';
+    } else {
+      if (successTitle) successTitle.textContent = '✓ Inquiry Ready!';
+      successMsg.textContent = 'Thank you, ' + name + '! Tap below to send your details directly to our craftsman team on WhatsApp, or give us a quick call.';
+    }
+    waLink.href = waUrl;
+    if (mailLink) mailLink.href = mailtoUrl;
+    successCard.classList.add('active');
+  }
+
+  showToast(apiSuccess ? '✓ Inquiry submitted! Check WhatsApp for quick response.' : '✓ Inquiry ready! Tap WhatsApp to send.');
+
+  // Reset inputs
+  nameEl.value = '';
+  phoneEl.value = '';
+  if (cityEl) cityEl.value = '';
+  if (dateEl) dateEl.value = '';
+  if (msgEl) msgEl.value = '';
+  if (emailEl) emailEl.value = '';
+  if (srvEl) srvEl.value = '';
+  if (budgetEl) budgetEl.value = '';
+  if (detailsEl) detailsEl.value = '';
+}
+
+function highlightError(el) {
+  if (!el) return;
+  el.focus();
+  el.style.borderColor = '#e74c3c';
+  el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.2)';
+  setTimeout(() => {
+    el.style.borderColor = '';
+    el.style.boxShadow = '';
+  }, 2500);
 }
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
+  if (!toast) return;
   toast.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 4000);
@@ -1269,26 +1574,30 @@ function showToast(msg) {
 
 // ===================== SCROLL ANIMATIONS =====================
 function initFadeUps() {
-  const activePageFadeUps = document.querySelector('.page.active').querySelectorAll('.fade-up');
+  const activePage = document.querySelector('.page.active');
+  if (!activePage) return;
+  const activePageFadeUps = activePage.querySelectorAll('.fade-up');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.08 });
   activePageFadeUps.forEach(el => observer.observe(el));
 }
 
 // ===================== COUNTER ANIMATION =====================
 function animateCounters() {
-  const counters = document.querySelectorAll('.page.active [data-count]');
+  const activePage = document.querySelector('.page.active');
+  if (!activePage) return;
+  const counters = activePage.querySelectorAll('[data-count]');
   counters.forEach(el => {
     const target = parseInt(el.dataset.count);
     const suffix = target === 5 ? '' : '+';
     let start = 0;
-    const duration = 1800;
+    const duration = 1500;
     const step = Math.ceil(target / (duration / 16));
     const timer = setInterval(() => {
       start = Math.min(start + step, target);
@@ -1299,7 +1608,12 @@ function animateCounters() {
 }
 
 // ===================== INIT =====================
-setTimeout(() => { initFadeUps(); animateCounters(); }, 200);
+window.addEventListener('DOMContentLoaded', () => {
+  initFadeUps();
+  animateCounters();
+});
+setTimeout(() => { initFadeUps(); animateCounters(); }, 250);
+
 </script>
 </body>
 </html>
